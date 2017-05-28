@@ -159,9 +159,9 @@ function EncodeDisplayPanel(topText, bottomText, bitmap, alertUser){
 		id |= 1
 
 	payload = struct.pack(">BHHHBB", [0, 0, 0, 0, id, 0])	// final 0 is for plaintext vs bitmapimage (1) strings
-	payload += struct.pack(">H", [len(topText)]) + topText
+	payload += struct.pack(">H", [topText.length]) + topText
 	payload += struct.pack(">H", [0]) 			// unused string
-	payload += struct.pack(">H", [len(bottomText)]) + bottomText
+	payload += struct.pack(">H", [bottomText.length]) + bottomText
 	payload += bitmap
 
 	return EncodeLVMessage(MSG_DISPLAYPANEL, payload)
@@ -354,22 +354,27 @@ GetAlert.prototype.toString = function() {
 }
 
 function Navigation(messageId, msg) {
-		this.messageId = messageId
-		(byte0, byte1, navigation, this.menuItemId, menuId) = struct.unpack(">BBBBB", msg)
+		this.messageId = messageId;
+		var unpacked = struct.unpack(">BBBBB", msg)
+		var byte0 = unpacked[0],
+			byte1 = unpacked[1],
+			navigation = unpacked[2],
+			menuItemId = unpacked[3], 
+			menuId = unpacked[4];
 		if (byte0 != 0)
-			print >>sys.stderr, "Navigation with unknown byte0 value %i" % byte0
+			console.error(`Navigation with unknown byte0 value ${byte0}`);
 		if (byte1 != 3)
-			print >>sys.stderr, "Navigation with unknown byte1 value %i" % byte1
+			console.error(`Navigation with unknown byte1 value ${byte1}`);
 		if (menuId != 10 && menuId != 20)
-			print >>sys.stderr, "Navigation with unexpected menuId value %i" % menuId
+			console.error(`Navigation with unexpected menuId value ${menuId}`);
 		if ((navigation != 32) && ((navigation < 1) || (navigation > 15)))
-			print >>sys.stderr, "Navigation with out of range value %i" % navigation
+			console.error(`Navigation with out of range value ${navigation}`);
 			
 		this.wasInAlert = menuId == 20
 
 		if (navigation != 32){
 			this.navAction = (navigation - 1) % 3
-			this.navType = int((navigation - 1) / 3)
+			this.navType = parseInt((navigation - 1) / 3)
 		}
 		else {
 			this.navAction = NAVACTION_PRESS
@@ -514,6 +519,7 @@ module.exports = {
 	EncodeAck: EncodeAck,
 	EncodeLVMessage: EncodeLVMessage,
 	EncodeDeviceStatusAck: EncodeDeviceStatusAck,
+	EncodeDisplayPanel: EncodeDisplayPanel,
 	EncodeGetAlertResponse: EncodeGetAlertResponse,
 	EncodeGetCaps: EncodeGetCaps,
 	EncodeGetMenuItemResponse: EncodeGetMenuItemResponse,
