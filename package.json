@@ -1,0 +1,21 @@
+{
+  "name": "nodeliveview",
+  "version": "1.0.0",
+  "description": "Sony Ericsson LiveView MW800 NodeJS Demo App",
+  "main": "run.js",
+  "dependencies": {
+    "bluetooth-serial-port": "^2.1.2",
+    "bufferpack": "0.0.6"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.3.0",
+    "nyc": "^10.2.0"
+  },
+  "scripts": {
+    "test": "NODE_ENV=test nyc mocha './*.spec.js'"
+  },
+  "author": "Felix Mann <djflix@gmail.com>",
+  "license": "ISC"
+}
