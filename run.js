@@ -70,7 +70,7 @@ function handleMessage(msg) {
 		btSerial.write(new Buffer(messagesParser.EncodeSetMenuSettings(menuVibrationTime, 0)), HandleBtWriteError)
 	} else if (msg instanceof messagesParser.GetTime) {
 		console.log("GetTime");
-		btSerial.write(new Buffer(messagesParser.EncodeGetTimeResponse(Math.floor(new Date().getTime() / 1000), true)), HandleBtWriteError);
+		btSerial.write(new Buffer(messagesParser.EncodeGetTimeResponse(Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60), true)), HandleBtWriteError);
 	} else if (msg instanceof messagesParser.DeviceStatus) {
 		console.log("DeviceStatus");
 		btSerial.write(new Buffer(messagesParser.EncodeDeviceStatusAck()), HandleBtWriteError);
