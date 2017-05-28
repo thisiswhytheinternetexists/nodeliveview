@@ -19,22 +19,32 @@ What does it do?
 - [X] Decode protocol messages from the LiveView device
 - [X] Encode protocol messages to the LiveView device
 - [ ] Port all logic from [adqmisc/liveview](https://code.google.com/archive/p/adqmisc/source/default/source)
- - [X] Get software version
- - [X] Get (and parse) device capabilities
- - [X] Set date/time on device
- - [ ] Handle navigation
- - [ ] Load MenuItems
- - [ ] Handle MenuItems clicked
- - [X] Vibrate
- - [ ] RGB Led
- - [ ] Alarms
+  - [X] Get software version
+  - [X] Get (and parse) device capabilities
+  - [X] Set date/time on device
+  - [ ] Handle navigation
+  - [ ] Load MenuItems
+  - [ ] Handle MenuItems clicked
+  - [X] Vibrate
+  - [ ] RGB Led
+  - [ ] Alarms
 
 And there's probably more to fix.
 
 How do I run it?
 ----------------------------
-`$ npm install`
-`$ node run`
+```|bash
+$ npm install
+$ node run
+```
+If the LiveView device is paired with your computer it should vibrate and show the following output:
+```|bash
+Waiting...
+DisplayCapabilities
+GetMenuItems
+```
+
+You can kill the script with Ctrl+C.
 
 How do I contribute?
 ----------------------------
