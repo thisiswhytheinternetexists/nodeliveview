@@ -26,7 +26,7 @@ What does it do?
   - [ ] Load MenuItems
   - [ ] Handle MenuItems clicked
   - [X] Vibrate
-  - [ ] RGB Led
+  - [X] RGB Led
   - [ ] Alarms
 
 And there's probably more to fix.

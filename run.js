@@ -38,6 +38,7 @@ btSerial.listPairedDevices(function(allTheThings) {
 					}
 				});
 				btSerial.write(new Buffer(messagesParser.EncodeSetVibrate(100, 100)), HandleBtWriteError);
+				btSerial.write(new Buffer(messagesParser.EncodeSetLED(31, 0, 31, 100, 200)), HandleBtWriteError);
 				btSerial.write(new Buffer(messagesParser.EncodeGetCaps()), HandleBtWriteError);
 			}, function() {
 				console.log('nope');
