@@ -11,7 +11,7 @@ var icons = {};
 function readIcon(name, cb) {
 	fs.readFile(name, function(err, data) {
 		if(!err) {
-			icons[name] = data;
+			icons[name.replace("icons/", "")] = data;
 			if(typeof(cb) !== 'undefined') {
 				cb();
 			}
@@ -21,12 +21,16 @@ function readIcon(name, cb) {
 }
 var items = [];
 
-readIcon("mail.png", function() {
-	items[0] = new Buffer(messagesParser.EncodeGetMenuItemResponse(0, true, 1, "Mail", icons["mail.png"]));
-})
-readIcon("test36.png", function() {
-	items[1] = new Buffer(messagesParser.EncodeGetMenuItemResponse(1, false, 0, "Item 2", icons["test36.png"]));
-	items[2] = new Buffer(messagesParser.EncodeGetMenuItemResponse(2, false, 0, "Item 3", icons["test36.png"]));
+readIcon("icons/android_recovery.png", function() {
+	items[0] = new Buffer(messagesParser.EncodeGetMenuItemResponse(0, true, 1, "Droids", icons["android_recovery.png"]));
+});
+
+readIcon("icons/wifi.png", function() {
+	items[1] = new Buffer(messagesParser.EncodeGetMenuItemResponse(1, false, 0, "WiFi", icons["wifi.png"]));
+});
+
+readIcon("icons/settings.png", function() {
+	items[2] = new Buffer(messagesParser.EncodeGetMenuItemResponse(2, false, 0, "Settings", icons["settings.png"]));
 });
 
 function HandleBtWriteError(err, bytesWritten) {
