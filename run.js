@@ -84,7 +84,7 @@ function handleMessage(msg) {
 		btSerial.write(messagesParser.EncodeNavigationResponse(messagesParser.RESULT_EXIT), HandleBtWriteError);
 		if (msg.navType == NAVTYPE_DOWN) {
 			if (! msg.wasInAlert)
-				clientSocket.send(LiveViewMessages.EncodeDisplayPanel("TOOOOOOOOOOOOOOOOOP", "BOTTTTTTTTTTTTTTTTTOM", icons["test36.png"], false), HandleBtWriteError)
+				btSerial.write(messagesParser.EncodeDisplayPanel("Text will scroll sideways", "But using newlines\nis also an elegant\nsolution\nfor text display.", icons["test36.png"], false), HandleBtWriteError);
 		}
 	} else if (msg instanceof messagesParser.GetSwVersion) {
 		weDidSoftwareVersionRequestAlready = true;
