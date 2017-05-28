@@ -73,8 +73,7 @@ function handleMessage(msg) {
 		btSerial.write(items[1], HandleBtWriteError);
 		btSerial.write(items[2], HandleBtWriteError);
 	} else if (msg instanceof messagesParser.GetMenuItem) {
-		console.log("GetMenuItem");
-		//todo fix me
+		btSerial.write(items[menuItemId], HandleBtWriteError);
 	} else if (msg instanceof messagesParser.DisplayCapabilities) {
 		console.log("DisplayCapabilities");
 		deviceCapabilities = msg
