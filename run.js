@@ -72,7 +72,7 @@ function handleMessage(msg) {
 		console.log("GetTime");
 		btSerial.write(new Buffer(messagesParser.EncodeGetTimeResponse(Math.floor(new Date().getTime() / 1000) - (new Date().getTimezoneOffset() * 60), true)), HandleBtWriteError);
 	} else if (msg instanceof messagesParser.DeviceStatus) {
-		console.log("DeviceStatus");
+		console.log("DeviceStatus: " + msg.deviceStatus);
 		btSerial.write(new Buffer(messagesParser.EncodeDeviceStatusAck()), HandleBtWriteError);
 		if(!weDidSoftwareVersionRequestAlready)
 			btSerial.write(new Buffer(messagesParser.EncodeGetSwVersion()), HandleBtWriteError);
