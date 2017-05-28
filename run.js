@@ -8,16 +8,26 @@ var weDidSoftwareVersionRequestAlready = false;
 
 var icons = {};
 
-function readIcon(name) {
-	fs.readFile(name, "utf8", function(err, data) {
+function readIcon(name, cb) {
+	fs.readFile(name, function(err, data) {
 		if(!err) {
 			icons[name] = data;
+			if(typeof(cb) !== 'undefined') {
+				cb();
+			}
 		}
 	});
-}
 
-readIcon("test36.png");
-readIcon("test128.png");
+}
+var items = [];
+
+readIcon("mail.png", function() {
+	items[0] = new Buffer(messagesParser.EncodeGetMenuItemResponse(0, true, 1, "Mail", icons["mail.png"]));
+})
+readIcon("test36.png", function() {
+	items[1] = new Buffer(messagesParser.EncodeGetMenuItemResponse(1, false, 0, "Item 2", icons["test36.png"]));
+	items[2] = new Buffer(messagesParser.EncodeGetMenuItemResponse(2, false, 0, "Item 3", icons["test36.png"]));
+});
 
 function HandleBtWriteError(err, bytesWritten) {
 	if(err) {
@@ -59,15 +69,16 @@ function handleMessage(msg) {
 
 	if(msg instanceof messagesParser.GetMenuItems) {
 		console.log("GetMenuItems");
-		btSerial.write(new Buffer(messagesParser.EncodeGetMenuItemResponse(0, true, 0, "Moo", icons["test36.png"])), HandleBtWriteError);
+		btSerial.write(items[0], HandleBtWriteError);
+		btSerial.write(items[1], HandleBtWriteError);
+		btSerial.write(items[2], HandleBtWriteError);
 	} else if (msg instanceof messagesParser.GetMenuItem) {
 		console.log("GetMenuItem");
 		//todo fix me
 	} else if (msg instanceof messagesParser.DisplayCapabilities) {
 		console.log("DisplayCapabilities");
 		deviceCapabilities = msg
-
-		btSerial.write(new Buffer(messagesParser.EncodeSetMenuSize(4)), HandleBtWriteError)
+		btSerial.write(new Buffer(messagesParser.EncodeSetMenuSize(3)), HandleBtWriteError)
 		btSerial.write(new Buffer(messagesParser.EncodeSetMenuSettings(menuVibrationTime, 0)), HandleBtWriteError)
 	} else if (msg instanceof messagesParser.GetTime) {
 		console.log("GetTime");

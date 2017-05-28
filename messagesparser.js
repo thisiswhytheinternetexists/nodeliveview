@@ -143,11 +143,13 @@ function EncodeDeviceStatusAck(){
 }
 
 function EncodeGetMenuItemResponse(menuItemId, isAlertItem, unreadCount, text, itemBitmap){
-	payload = struct.pack(">BHHHBB", [!isAlertItem, 0, unreadCount, 0, menuItemId + 3, 0])	 //final 0 is for plaintext vs bitmapimage (1) strings
-	payload += struct.pack(">H", [0]) 		// unused string
-	payload += struct.pack(">H", [0]) 	    // unused string
-	payload += struct.pack(">H", [text.length]) + text
-	payload += itemBitmap
+	payload = Buffer.concat([struct.pack(">BHHHBB", [!isAlertItem, 0, unreadCount, 0, menuItemId + 3, 0]),	 //final 0 is for plaintext vs bitmapimage (1) strings
+		struct.pack(">H", [0]), 		// unused string
+		struct.pack(">H", [0]), 	    // unused string
+		struct.pack(">H", [text.length]),
+		Buffer.from(text),
+		new Buffer(itemBitmap)
+	]);
 
 	return EncodeLVMessage(MSG_GETMENUITEM_RESP, payload)
 }
@@ -158,11 +160,14 @@ function EncodeDisplayPanel(topText, bottomText, bitmap, alertUser){
 	if (!alertUser)
 		id |= 1
 
-	payload = struct.pack(">BHHHBB", [0, 0, 0, 0, id, 0])	// final 0 is for plaintext vs bitmapimage (1) strings
-	payload += struct.pack(">H", [topText.length]) + topText
-	payload += struct.pack(">H", [0]) 			// unused string
-	payload += struct.pack(">H", [bottomText.length]) + bottomText
-	payload += bitmap
+	payload = Buffer.concat([struct.pack(">BHHHBB", [0, 0, 0, 0, id, 0]),	// final 0 is for plaintext vs bitmapimage (1) strings
+		struct.pack(">H", [topText.length]),
+		Buffer.from(topText),
+		struct.pack(">H", [0]),	// unused string
+		struct.pack(">H", [bottomText.length]),
+		Buffer.from(bottomText),
+		Buffer.from(bitmap)
+	]);
 
 	return EncodeLVMessage(MSG_DISPLAYPANEL, payload)
 }
@@ -177,11 +182,11 @@ function EncodeSetStatusBar(menuItemId, unreadAlerts, itemBitmap) {
 	// Note that menu item#0 is treated specially if you have non-zero unreadAlerts...
 	// Its value will be automatically updated from the other menu items... e.g. if item #3 currently has 20, and is changed to 200 with this call, item#0 will automatically be set to 180 (200-20). Slightly annoying!
 
-	payload = struct.pack(">BHHHBB", [0, 0, unreadAlerts, 0, menuItemId + 3, 0])
-	payload += struct.pack(">H", [0])
-	payload += struct.pack(">H", [0])
-	payload += struct.pack(">H", [0])
-	payload += itemBitmap
+	payload = Buffer.concat([struct.pack(">BHHHBB", [0, 0, unreadAlerts, 0, menuItemId + 3, 0]),
+		struct.pack(">H", [0]),
+		struct.pack(">H", [0]),
+		struct.pack(">H", [0]),
+		Buffer.from(itemBitmap)]);
 	
 	return EncodeLVMessage(MSG_SETSTATUSBAR, payload)
 }
@@ -220,12 +225,16 @@ function EncodeSetMenuSettings(vibrationTime, initialMenuItemId){
 }
 
 function EncodeGetAlertResponse(totalCount, unreadCount, alertIndex, timestampText, headerText, bodyTextChunk, bitmap){
-	var payload = struct.pack(">BHHHBB", [0, totalCount, unreadCount, alertIndex, 0, 0])	// final 0 is for plaintext vs bitmapimage (1) strings
-	payload += struct.pack(">H", [len(timestampText)]) + timestampText
-	payload += struct.pack(">H", [len(headerText)]) + headerText
-	payload += struct.pack(">H", [len(bodyTextChunk)]) + bodyTextChunk
-	payload += struct.pack(">B", [0])
-	payload += struct.pack(">L", [len(bitmap)]) + bitmap
+	var payload = Buffer.concat([struct.pack(">BHHHBB", [0, totalCount, unreadCount, alertIndex, 0, 0]),	// final 0 is for plaintext vs bitmapimage (1) strings
+		struct.pack(">H", [len(timestampText)]),
+		Buffer.from(timestampText),
+		struct.pack(">H", [len(headerText)]),
+		Buffer.from(headerText),
+		struct.pack(">H", [len(bodyTextChunk)]),
+		Buffer.from(bodyTextChunk),
+		struct.pack(">B", [0]),
+		struct.pack(">L", [len(bitmap)]),
+		Buffer.from(bitmap)]);
 
 	return EncodeLVMessage(MSG_GETALERT_RESP, payload)
 }
@@ -370,7 +379,7 @@ function Navigation(messageId, msg) {
 		if ((navigation != 32) && ((navigation < 1) || (navigation > 15)))
 			console.error(`Navigation with out of range value ${navigation}`);
 			
-		this.wasInAlert = menuId == 20
+		this.wasInAlert = (menuId === 20)
 
 		if (navigation != 32){
 			this.navAction = (navigation - 1) % 3
