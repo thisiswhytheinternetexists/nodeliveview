@@ -82,7 +82,7 @@ function handleMessage(msg) {
 	} else if (msg instanceof messagesParser.Navigation) {
 		console.log("Navigation");
 		btSerial.write(messagesParser.EncodeNavigationResponse(messagesParser.RESULT_EXIT), HandleBtWriteError);
-		if (msg.navType == LiveViewMessages.NAVTYPE_DOWN) {
+		if (msg.navType == NAVTYPE_DOWN) {
 			if (! msg.wasInAlert)
 				clientSocket.send(LiveViewMessages.EncodeDisplayPanel("TOOOOOOOOOOOOOOOOOP", "BOTTTTTTTTTTTTTTTTTOM", icons["test36.png"], false), HandleBtWriteError)
 		}
@@ -96,3 +96,10 @@ function handleMessage(msg) {
 }
 
 console.log("Waiting...");	
+
+const NAVTYPE_UP		= 0
+const NAVTYPE_DOWN		= 1
+const NAVTYPE_LEFT		= 2
+const NAVTYPE_RIGHT		= 3
+const NAVTYPE_SELECT		= 4
+const NAVTYPE_MENUSELECT	= 5
