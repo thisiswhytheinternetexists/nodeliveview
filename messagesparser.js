@@ -155,7 +155,6 @@ function EncodeGetMenuItemResponse(menuItemId, isAlertItem, unreadCount, text, i
 }
 
 function EncodeDisplayPanel(topText, bottomText, bitmap, alertUser){
-
 	id = 80
 	if (!alertUser)
 		id |= 1

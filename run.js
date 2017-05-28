@@ -93,7 +93,7 @@ function handleMessage(msg) {
 			btSerial.write(new Buffer(messagesParser.EncodeGetSwVersion()), HandleBtWriteError);
 	} else if (msg instanceof messagesParser.GetAlert) {
 		console.log("GetAlert");
-		btSerial.write(new Buffer(messagesParser.EncodeGetAlertResponse(20, 4, 15, "TIME", "HEADER", "01234567890123456789012345678901234567890123456789", testPng)), HandleBtWriteError)
+		btSerial.write(new Buffer(messagesParser.EncodeGetAlertResponse(20, 4, 15, "TIME", "HEADER", "01234567890123456789012345678901234567890123456789", testPng)), HandleBtWriteError);
 	} else if (msg instanceof messagesParser.Navigation) {
 		console.log("Navigation");
 		btSerial.write(messagesParser.EncodeNavigationResponse(messagesParser.RESULT_EXIT), HandleBtWriteError);
